@@ -78,7 +78,9 @@ def plot_top_words(df: pd.DataFrame):
     # df_top_100 = df[:100] # use this later
 
     # draw horizontal barchart
-    alt.Chart(df_top).mark_bar().encode(x="count:Q", y=alt.Y("word:N", sort="-x"))
+    print(
+        alt.Chart(df_top).mark_bar().encode(x="count:Q", y=alt.Y("word:N", sort="-x"))
+    )
     return df_100
 
 
@@ -158,21 +160,41 @@ def plot_pos_words(df_pared: pd.DataFrame):
         .transform_filter(selection)
     )
 
-    chart1 | chart2
+    stacked_chart = chart1 | chart2
+    return stacked_chart
 
 
-# def main():
-#     # download_models()
-#     stopwords = define_stopwords()
-#     story = ingest("docs/alice.txt")
-#     _, without_stopwords = tokenize(story, stopwords)
-#     words_frequency = bag_of_words(without_stopwords)
-#     create_wordcloud(story)
-#     df = get_common_words(words_frequency)
-#     df.head()
-#     df = plot_top_words(df)
-#     words, types = words_by_type(story, stopwords)
-#     df_pared = create_pos_dataframe(words, types, df)
+def common(story: str) -> list:
+    stopwords = define_stopwords()
+    _, without_stopwords = tokenize(story, stopwords)
+    words_frequency = bag_of_words(without_stopwords)
+    return words_frequency, stopwords
 
 
-# main()
+def wordcloud(story: str):
+    create_wordcloud(story)
+
+
+def top_words(words_frequency: list):
+    df = get_common_words(words_frequency)
+    df = plot_top_words(df)
+    return df
+
+
+def pos(story: str, stopwords: list, df: pd.DataFrame):
+    words, types = words_by_type(story, stopwords)
+    df_pared = create_pos_dataframe(words, types, df)
+    _ = plot_pos_words(df_pared)
+
+
+def main():
+    download_models()
+    story = ingest("docs/fagles.txt")
+    words_frequency, stopwords = common(story)
+    wordcloud(story)
+    df_top = top_words(words_frequency)
+    print(df_top.head())
+    pos(story, stopwords, df_top)
+
+
+main()
