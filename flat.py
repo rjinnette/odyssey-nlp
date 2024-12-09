@@ -2,10 +2,12 @@ import pandas as pd
 import altair as alt
 import nltk  # ← new
 from nltk.corpus import stopwords as stop
-from nltk.stem import PorterStemmer as stemmer
-from nltk.stem import WordNetLemmatizer as lemmatizer
-from nltk.corpus import wordnet
-from nltk import word_tokenize, pos_tag
+
+# from nltk.stem import PorterStemmer as stemmer
+# from nltk.stem import WordNetLemmatizer as lemmatizer
+# from nltk.corpus import wordnet
+
+# from nltk import word_tokenize, pos_tag
 import spacy
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
